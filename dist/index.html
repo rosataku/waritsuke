@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      }
+
+      #title {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      h4 {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
+    <title>割付表ジェネレータ３</title>
+  </head>
+
+  <body class="py-4 px-4 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md"></div>
+        <div class="col-md-6">
+          <h2 class="text-center" id="title">割付表ジェネレータ</h2>
+        </div>
+        <div class="col-md">
+          <div class="row justify-content-end mx-auto">
+            <button type="button" class="btn btn-outline-secondary btn-sm col-sm-auto" id="resetForm">
+              <i class="bi bi-arrow-clockwise"></i>
+              フォームをリセット
+            </button>
+          </div>
+        </div>
+      </div>
+      <hr class="mb-2" />
+      <div class="row">
+        <div class="col-md-6 order-md-1 mb-4">
+          <form class="needs-validation" novalidate>
+            <h4 class="my-3"><i class="bi bi-journal-text"></i> テキスト情報</h4>
+
+            <div class="row">
+              <div class="col-sm-auto">
+                <label for="year">年度</label>
+                <select name="" id="year" class="form-select"></select>
+              </div>
+              <div class="col-sm-auto">
+                <label for="semester">学期</label>
+                <select name="" id="semester" class="form-select">
+                  <option value="">----</option>
+                  <option>１学期</option>
+                  <option>夏期講習</option>
+                  <option>２学期</option>
+                  <option>冬期講習</option>
+                  <option>冬期講習Ⅰ期</option>
+                  <option>冬期講習Ⅱ期</option>
+                  <option>３学期</option>
+                  <option>春期講習</option>
+                </select>
+              </div>
+            </div>
+            <br />
+
+            <div class="row">
+              <div class="col-sm-4">
+                <label for="textNumber">テキスト番号</label>
+                <input
+                  type="text"
+                  id="textNumber"
+                  class="form-control"
+                  placeholder="テキスト番号"
+                  pattern="^[a-zA-Z0-9]+$"
+                  maxlength="10"
+                />
+              </div>
+              <div class="col-sm-7">
+                <label for="textName">テキスト名</label>
+                <input type="text" id="textName" class="form-control" placeholder="テキスト名" maxlength="40" />
+              </div>
+            </div>
+
+            <!-- <hr class="mb-4" /> -->
+            <h4 class="my-3 mt-5"><i class="bi bi-sliders2"></i> 割付表設定</h4>
+
+            <lavel>割付表の末尾に"白"を自動追加：</lavel>
+
+            <div class="ms-3 my-1">
+              <input type="radio" id="2n" name="whitePageSetting" value="2n" checked />
+              <label for="2n">総ページ数が偶数になるように</label>
+            </div>
+
+            <div class="ms-3 my-1">
+              <input type="radio" id="4n" name="whitePageSetting" value="4n" />
+              <label for="4n">総ページ数が4の倍数になるように</label>
+            </div>
+            <div class="mt-3">
+              <input type="checkbox" id="pdfMessageSetting" name="pdfMessageSetting" checked />
+              <label for="pdfMessageSetting">PDF校了用の文言を追加</label>
+            </div>
+            <!-- <hr class="mb-4" /> -->
+          </form>
+        </div>
+
+        <div class="col-md-6 order-md-2">
+          <!-- <div class="container"> -->
+          <div class="row align-items-center">
+            <div class="col-auto me-auto">
+              <h4 class="my-3"><i class="bi bi-table"></i> 項目</h4>
+            </div>
+            <div class="col-auto">
+              <button
+                type="button"
+                class="btn btn-outline-secondary btn-sm my-3"
+                id="suggestSetting"
+                data-bs-toggle="modal"
+                data-bs-target="#modal"
+              >
+                <i class="bi bi-gear-wide-connected"></i>
+                サジェスト設定
+              </button>
+            </div>
+          </div>
+
+          <div id="inputLists">
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+            <div class="row inputList py-1">
+              <div class="col">
+                <input type="text" list="itemList" class="form-control" maxlength="15" placeholder="項目名" />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
+                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+              </div>
+            </div>
+          </div>
+
+          <datalist id="itemList"> </datalist>
+        </div>
+      </div>
+
+      <div class="d-grid gap-2 col-md-6 mx-auto">
+        <button type="button" class="btn btn-primary btn-lg my-4" id="generateButton">
+          <i class="bi bi-rocket-takeoff-fill"></i>
+          割付表生成
+        </button>
+      </div>
+    </div>
+    <footer class="my-5 text-muted text-center text-small">
+      <p class="mb-1" id="credit"></p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a class="link-underline link-underline-opacity-0" href="#">特長</a></li>
+        <li class="list-inline-item"><a class="link-underline link-underline-opacity-0" href="#">使い方</a></li>
+        <li class="list-inline-item"><a class="link-underline link-underline-opacity-0" href="#">GitHub</a></li>
+      </ul>
+    </footer>
+
+    <!-- モーダルウィンドウ -->
+    <div
+      class="modal fade"
+      id="modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="label1"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="label1"><i class="bi bi-gear-wide-connected"></i> サジェスト設定</h5>
+            <!-- <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button> -->
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <!-- <label for="elementSuggestion" class="form-label"></label> -->
+              <textarea
+                class="form-control"
+                id="elementSuggestion"
+                rows="10"
+                aria-labelledby="suggestionHelpBlock"
+              ></textarea>
+              <div id="suggestionHelpBlock" class="form-text">
+                改行区切りで入力してください。入力内容はブラウザに保存され、次回以降も使用できます。
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary me-auto" id="default">デフォルトに戻す</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel">キャンセル</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="save">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./main.js"></script>
+    <script>
+      //全角数字→半角数字への自動変換と、数字以外を削除する関数。
+      const onlyNumbers = (n) => {
+        return n.replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g, '');
+      };
+    </script>
+  </body>
+</html>
