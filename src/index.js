@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //サジェスト設定を初期化する関数
 const initializeSug = () => {
-  elementSuggestion.value = ['中扉', '白', 'テキストの構成と活用法', '目次'].join('\n');
+  elementSuggestion.value = ['中扉', '白', 'テキストの構成と活用法', '目次', 'ヨヨキー'].join('\n');
 };
 
 //サジェスト設定を適用する関数
@@ -214,4 +214,16 @@ document.getElementById('save').addEventListener('click', () => {
 //デフォルトに戻すボタン押下時
 document.getElementById('default').addEventListener('click', () => {
   initializeSug();
+});
+
+//-------------------イースターエッグ-------------------------------
+//項目名に「ヨヨキー」と入力したらアラートを出す。
+const allElementName = document.querySelectorAll('.elementName');
+allElementName.forEach(function (elementName) {
+  elementName.addEventListener('change', function (e) {
+    const inputValue = e.target.value;
+    if (inputValue == 'ヨヨキー') {
+      alert('彼は呼んでも来ません。残念！');
+    }
+  });
 });
