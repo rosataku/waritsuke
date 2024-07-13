@@ -1,12 +1,10 @@
 import { text, image, barcodes } from '@pdfme/schemas';
 import { generate } from '@pdfme/generator';
-import { Font } from '@pdfme/common';
-import ipaexm from '/fonts/ipaexm.ttf';
-import ipaexg from '/fonts/ipaexg.ttf';
+import ipaexm from '/dist/fonts/ipaexm.ttf';
+import ipaexg from '/dist/fonts/ipaexg.ttf';
 
-//引数オブジェクトは、{ textNumber: string, textName: string, pdfMessage: string, result: 配列 }
+//引数オブジェクトは、{ textNumber: string, textName: string, pdfMessage: string, result: array }
 export async function makeOnePagePdf(pdfSource) {
-  //(async () => {
   const a = await fetch(ipaexm);
   const minbuf = await a.arrayBuffer();
   const b = await fetch(ipaexg);
@@ -7612,8 +7610,6 @@ export async function makeOnePagePdf(pdfSource) {
   inputs.push(tempObj);
 
   const pdf = await generate({ template, plugins, inputs, options: { font } });
-  // Node.js
-  // fs.writeFileSync(path.join(__dirname, 'test.pdf'), pdf);
 
   // Browser
   const blob = new Blob([pdf.buffer], { type: 'application/pdf' });

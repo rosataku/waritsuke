@@ -1,6 +1,6 @@
 const path = require('path');
 
-mode: 'development',
+mode: 'production',
   (module.exports = {
     entry: './src/index.js',
     output: {
@@ -12,12 +12,18 @@ mode: 'development',
       rules: [
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader']
+          use: [
+            {
+              // Adds CSS to the DOM by injecting a `<style>` tag
+              loader: 'style-loader'
+            },
+            {
+              // Interprets `@import` and `url()` like `import/require()` and will resolve them
+              loader: 'css-loader'
+            }
+          ]
         },
-        /* {
-          test: /\.(woff|woff2|eot|ttf|otf)$/i,
-          type: 'asset/resource'
-        }, */
+
         {
           test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
           use: [
@@ -35,7 +41,7 @@ mode: 'development',
     watch: true,
     // mode値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
-    mode: 'development',
+    mode: 'production',
 
     // ローカル開発用環境を立ち上げる
     // 実行時にブラウザが自動的に localhost を開く

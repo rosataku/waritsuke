@@ -1,12 +1,11 @@
 'use strict';
 
+import { makeOnePagePdf } from './makeOnePagePdf';
+import { makeTwoPagesPdf } from './makeTwoPagesPdf';
 // Bootstrapのスタイルシート側の機能を読み込む
 import 'bootstrap/dist/css/bootstrap.min.css';
 // BootstrapのJavaScript側の機能を読み込む
 import 'bootstrap';
-
-import { makeOnePagePdf } from './makeOnePagePdf';
-import { makeTwoPagesPdf } from './makeTwoPagesPdf';
 
 const storage = localStorage;
 const elementSuggestion = document.getElementById('elementSuggestion');
@@ -75,18 +74,17 @@ const setElementSug = () => {
   }
 };
 
-//割付結果を格納する配列を宣言
+//割付結果を格納する配列をグローバルスコープで宣言
 let result = [];
 
 //------------------割付表生成ボタンクリック時--------------------
 document.getElementById('generateButton').addEventListener('click', () => {
-  //年度とかはpdf生成の関数内で処理する。このイベントリスナー内は項目の配列を作るだけ。
   const year = document.getElementById('year').value;
   const semester = document.getElementById('semester').value;
   const textNumber = document.getElementById('textNumber').value;
   const textName = year + semester + '　' + document.getElementById('textName').value;
 
-  //オブジェクトの配列inputを宣言
+  //「項目」の入力内容を格納する配列を宣言
   const inputObjs = [];
 
   //項目設定の各行を配列に格納
@@ -124,7 +122,7 @@ document.getElementById('generateButton').addEventListener('click', () => {
         const startN = Number(obj.startNumber);
         const endN = Number(obj.endNumber);
 
-        //項目名に連番をつけてresult[]にpush。fromよりtoの方が小さい場合は逆順に連番を振る。
+        //項目名に連番をつけてresult[]にpush。fromよりtoの方が小さい場合は降順に連番を振る。
         if (endN >= startN) {
           for (let i = startN; i <= endN; i += 1) {
             result.push(`${obj.elementName + i}`);
@@ -138,7 +136,7 @@ document.getElementById('generateButton').addEventListener('click', () => {
     }
   }
 
-  //pdfメッセージ用に、白追加前の値を保持しておく
+  //pdf校了時の文言に使用するため、白追加前の総ページ数を保持しておく。
   const pdfMaxP = result.length;
 
   //「割付表設定」の値に応じて、白を追加。
@@ -163,7 +161,6 @@ document.getElementById('generateButton').addEventListener('click', () => {
   const checkbox = document.getElementsByName('pdfMessageSetting')[0];
   let pdfMessage = '';
   if (checkbox.checked == true && pdfMaxP >= 3) {
-    //console.log('チェックされています');
     pdfMessage = [
       '・表紙と中扉は版下支給（同封）。',
       `・本文3頁（"${result[2]}") ～`,
@@ -181,7 +178,7 @@ document.getElementById('generateButton').addEventListener('click', () => {
   } else if (result.length <= 576) {
     makeTwoPagesPdf(pdfSource);
   } else {
-    //ページ数が多すぎる場合、アラートを出す。
+    //ページ数が多すぎる場合、生成せずアラートを出す。
     alert('ページ数が多すぎるため、割付表を生成できませんでした。（総ページ数の上限は576です。）');
   }
 });
