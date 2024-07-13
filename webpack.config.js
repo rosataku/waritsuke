@@ -1,6 +1,6 @@
 const path = require('path');
 
-mode: 'production',
+mode: 'development',
   (module.exports = {
     entry: './src/index.js',
     output: {
@@ -20,6 +20,19 @@ mode: 'production',
             {
               // Interprets `@import` and `url()` like `import/require()` and will resolve them
               loader: 'css-loader'
+            },
+            {
+              // Loader for webpack to process CSS with PostCSS
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: () => [autoprefixer]
+                }
+              }
+            },
+            {
+              // Loads a SASS/SCSS file and compiles it to CSS
+              loader: 'sass-loader'
             }
           ]
         },
@@ -41,7 +54,7 @@ mode: 'production',
     watch: true,
     // mode値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
-    mode: 'production',
+    mode: 'development',
 
     // ローカル開発用環境を立ち上げる
     // 実行時にブラウザが自動的に localhost を開く

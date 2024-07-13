@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
+    <link rel=”icon” href=“/image/favicon.ico”>
     <style>
       body {
         font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
@@ -24,19 +25,23 @@
         font-style: normal;
       }
     </style>
+
     <title>割付表ジェネレータ</title>
   </head>
 
-  <body class="py-4 px-4 bg-light">
+  <body class="py-4 px-4">
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-md"></div>
-        <div class="col-md-6">
+        <div class="col-lg"></div>
+        <div class="col-lg-6">
           <h2 class="text-center" id="title">割付表ジェネレータ</h2>
         </div>
-        <div class="col-md">
+        <div class="col-lg">
           <div class="row justify-content-end mx-auto">
-            <button type="button" class="btn btn-outline-secondary btn-sm col-sm-auto" id="resetForm">
+            <button type="button" class="btn btn-outline-secondary btn-sm col-auto my-2" id="changeTheme">
+              <i class="bi bi-sun-fill" id="themeIcon"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm col-auto ms-3 my-2" id="resetForm">
               <i class="bi bi-arrow-clockwise"></i>
               フォームをリセット
             </button>
@@ -51,21 +56,21 @@
 
             <div class="row">
               <div class="col-sm-auto">
-                <label for="year">年度</label>
+                <label for="year" class="mb-1 ms-1">年度</label>
                 <select name="" id="year" class="form-select"></select>
               </div>
               <div class="col-sm-auto">
-                <label for="semester">学期</label>
+                <label for="semester" class="mb-1 ms-1">学期</label>
                 <select name="" id="semester" class="form-select">
                   <option value="">----</option>
                   <option>１学期</option>
-                  <option>夏期講習</option>
+                  <option>夏期</option>
                   <option>２学期</option>
-                  <option>冬期講習</option>
-                  <option>冬期講習Ⅰ期</option>
-                  <option>冬期講習Ⅱ期</option>
+                  <option>冬期</option>
+                  <option>冬期Ⅰ期</option>
+                  <option>冬期Ⅱ期</option>
                   <option>３学期</option>
-                  <option>春期講習</option>
+                  <option>春期</option>
                 </select>
               </div>
             </div>
@@ -73,19 +78,19 @@
 
             <div class="row">
               <div class="col-sm-4">
-                <label for="textNumber">テキスト番号</label>
+                <label for="textNumber" class="mb-1 ms-1">テキスト番号</label>
                 <input
                   type="text"
                   id="textNumber"
-                  class="form-control"
+                  class="form-control reset"
                   placeholder="テキスト番号"
                   pattern="^[a-zA-Z0-9]+$"
                   maxlength="10"
                 />
               </div>
               <div class="col-sm-7">
-                <label for="textName">テキスト名</label>
-                <input type="text" id="textName" class="form-control" placeholder="テキスト名" maxlength="40" />
+                <label for="textName" class="mb-1 ms-1">テキスト名</label>
+                <input type="text" id="textName" class="form-control reset" placeholder="テキスト名" maxlength="40" />
               </div>
             </div>
 
@@ -134,15 +139,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -150,15 +160,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -166,15 +181,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -182,15 +202,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -198,15 +223,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -214,15 +244,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -230,15 +265,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -246,15 +286,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -262,15 +307,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
             <div class="row inputList py-1">
@@ -278,15 +328,20 @@
                 <input
                   type="text"
                   list="itemList"
-                  class="form-control elementName"
+                  class="form-control elementName reset"
                   maxlength="15"
                   placeholder="項目名"
                 />
               </div>
               <div class="input-group col">
                 <span class="input-group-text">連番</span>
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="from" />
-                <input type="number" class="form-control" oninput="value = onlyNumbers(value)" placeholder="to" />
+                <input
+                  type="number"
+                  class="form-control reset"
+                  oninput="value = onlyNumbers(value)"
+                  placeholder="from"
+                />
+                <input type="number" class="form-control reset" oninput="value = onlyNumbers(value)" placeholder="to" />
               </div>
             </div>
           </div>
@@ -297,8 +352,7 @@
 
       <div class="d-grid gap-2 col-md-6 mx-auto">
         <button type="button" class="btn btn-primary btn-lg my-4" id="generateButton">
-          <i class="bi bi-rocket-takeoff-fill"></i>
-          割付表生成
+          <i class="bi bi-rocket-takeoff-fill" id="rocketIcon"></i> 割付表生成
         </button>
       </div>
     </div>

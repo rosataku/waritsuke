@@ -36,13 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   year.appendChild(opt3);
 
   //項目に既定値を入れる
-  document.getElementById('inputLists').firstElementChild.firstElementChild.firstElementChild.value = '中扉';
-  document.getElementById('inputLists').firstElementChild.nextElementSibling.firstElementChild.firstElementChild.value =
-    '白';
-  document.getElementById(
-    'inputLists'
-  ).firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.firstElementChild.value =
-    'テキストの構成と活用法';
+  setDefaultEl();
 
   //ローカルストレージにサジェスト設定がなければ初期化、あればそれを適用。
   if (storage.elementSuggestion == undefined) {
@@ -51,6 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
     elementSuggestion.value = storage.elementSuggestion;
   }
   setElementSug();
+
+  //テーマ設定。デフォルトはライトモード。
+
+  if (storage.theme == 'dark') {
+    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
+    document.body.classList.add('bg-dark');
+    document.getElementById('themeIcon').classList.add('bi-moon-fill');
+  } else {
+    document.querySelector('html').setAttribute('data-bs-theme', 'light');
+    document.body.classList.add('bg-light');
+    document.getElementById('themeIcon').classList.add('bi-sun-fill');
+  }
 });
 
 //サジェスト設定を初期化する関数
@@ -74,15 +80,46 @@ const setElementSug = () => {
   }
 };
 
+//項目に既定値を入れる関数
+const setDefaultEl = () => {
+  document.getElementById('inputLists').firstElementChild.firstElementChild.firstElementChild.value = '中扉';
+  document.getElementById('inputLists').firstElementChild.nextElementSibling.firstElementChild.firstElementChild.value =
+    '白';
+  document.getElementById(
+    'inputLists'
+  ).firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.firstElementChild.value =
+    'テキストの構成と活用法';
+};
+
+//-----------------テーマトグルボタン押下時-------------------
+document.getElementById('changeTheme').addEventListener('click', () => {
+  if (document.querySelector('html').getAttribute('data-bs-theme') == 'light') {
+    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
+    document.body.classList.replace('bg-light', 'bg-dark');
+    document.getElementById('themeIcon').classList.replace('bi-sun-fill', 'bi-moon-fill');
+    storage.theme = 'dark';
+  } else {
+    document.querySelector('html').setAttribute('data-bs-theme', 'light');
+    document.body.classList.replace('bg-dark', 'bg-light');
+    document.getElementById('themeIcon').classList.replace('bi-moon-fill', 'bi-sun-fill');
+    storage.theme = 'light';
+  }
+});
+
 //割付結果を格納する配列をグローバルスコープで宣言
 let result = [];
 
-//------------------割付表生成ボタンクリック時--------------------
+//------------------割付表生成ボタン押下時--------------------
 document.getElementById('generateButton').addEventListener('click', () => {
+  //ボタンを無効に
+  const geneBtn = document.getElementById('generateButton');
+  geneBtn.toggleAttribute('disabled');
+
+  //テキスト情報の値を取得
   const year = document.getElementById('year').value;
   const semester = document.getElementById('semester').value;
   const textNumber = document.getElementById('textNumber').value;
-  const textName = year + semester + '　' + document.getElementById('textName').value;
+  const textName = year + semester + ' ' + document.getElementById('textName').value;
 
   //「項目」の入力内容を格納する配列を宣言
   const inputObjs = [];
@@ -181,12 +218,18 @@ document.getElementById('generateButton').addEventListener('click', () => {
     //ページ数が多すぎる場合、生成せずアラートを出す。
     alert('ページ数が多すぎるため、割付表を生成できませんでした。（総ページ数の上限は576です。）');
   }
+
+  //ボタンを有効に
+  geneBtn.toggleAttribute('disabled');
 });
 
 //-----------------フォームリセットボタンクリック時----------------------
 document.getElementById('resetForm').addEventListener('click', () => {
-  //再読み込みするだけ
-  location.reload();
+  const resetForms = document.querySelectorAll('.reset');
+  resetForms.forEach(function (resetForm) {
+    resetForm.value = '';
+  });
+  setDefaultEl();
 });
 
 //--------------------モーダル関連----------------------------------
