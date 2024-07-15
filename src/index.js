@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setElementSug();
 
   //テーマ設定。デフォルトはライトモード。
-
   if (storage.theme == 'dark') {
     document.querySelector('html').setAttribute('data-bs-theme', 'dark');
     document.body.classList.add('bg-dark');
@@ -68,6 +67,7 @@ const initializeSug = () => {
 const setElementSug = () => {
   const items = document.getElementById('elementSuggestion').value.split(/\n/).filter(Boolean);
   const itemList = document.getElementById('itemList');
+
   //既存の子要素（option）をすべて削除
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
@@ -90,6 +90,14 @@ const setDefaultEl = () => {
   ).firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.firstElementChild.value =
     'テキストの構成と活用法';
 };
+
+//連番フォームの入力制限。初めの３文字だけ切り取る。
+const renban = document.querySelectorAll('.renban');
+renban.forEach(function (input) {
+  input.addEventListener('input', function (e) {
+    e.target.value = e.target.value.slice(0, 3);
+  });
+});
 
 //-----------------テーマトグルボタン押下時-------------------
 document.getElementById('changeTheme').addEventListener('click', () => {
