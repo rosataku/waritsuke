@@ -24,6 +24,7 @@
         font-weight: 400;
         font-style: normal;
       }
+
       [v-cloak] {
         display: none;
       }
@@ -37,13 +38,10 @@
       <div class="row align-items-center">
         <div class="col-lg"></div>
         <div class="col-lg-4">
-          <h2 class="text-center" id="title">割付表ジェネレータ</h2>
+          <h2 class="text-center" id="title" @dblclick="changeTitle">{{title}}</h2>
         </div>
         <div class="col-lg">
           <div class="row justify-content-end mx-auto">
-            <!-- <button type="button" class="btn btn-outline-secondary btn-sm col-auto my-2" id="changeTheme">
-              <i class="bi" id="themeIcon"></i>
-            </button> -->
             <button
               type="button"
               class="btn btn-outline-secondary btn-sm col-auto my-2 ms-3"
@@ -107,24 +105,6 @@
                 <input type="text" id="textName" class="form-control reset" placeholder="テキスト名" maxlength="40" />
               </div>
             </div>
-
-            <!-- <h4 class="my-3 mt-5"><i class="bi bi-sliders2 me-2"></i>割付表設定</h4>
-
-            <lavel>割付表の末尾に"白"を自動追加：</lavel>
-
-            <div class="ms-3 my-1">
-              <input type="radio" id="2n" name="whitePageSetting" value="2n" checked />
-              <label for="2n">総ページ数が偶数になるように</label>
-            </div>
-
-            <div class="ms-3 my-1">
-              <input type="radio" id="4n" name="whitePageSetting" value="4n" />
-              <label for="4n">総ページ数が4の倍数になるように</label>
-            </div>
-            <div class="mt-3">
-              <input type="checkbox" id="pdfMessageSetting" name="pdfMessageSetting" checked />
-              <label for="pdfMessageSetting">PDF校了用の文言を追加</label>
-            </div> -->
           </form>
         </div>
 
@@ -150,7 +130,7 @@
                   class="form-control reset"
                   maxlength="15"
                   placeholder="項目名"
-                  @change="easterEgg"
+                  @change="yoyoky"
                 />
               </div>
               <div class="input-group col">
@@ -195,7 +175,7 @@
       </div>
     </div>
     <footer class="my-5 text-muted text-center text-small">
-      <p class="mb-1" id="credit"></p>
+      <p class="mb-1" id="credit" @dblclick="changeCredit"></p>
       <ul class="list-inline">
         <li class="list-inline-item">
           <a
@@ -323,7 +303,6 @@
 
     <script src="https://unpkg.com/petite-vue"></script>
     <script src="./main.js"></script>
-    <!-- <script src="./vue.js" type="module"></script> -->
     <script>
       //全角数字→半角数字への自動変換と、数字以外を削除する関数。
       const onlyNumbers = (n) => {

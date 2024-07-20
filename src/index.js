@@ -222,6 +222,7 @@ PetiteVue.createApp({
   theme: '',
   whitePageSetting: '',
   pdfMessageSetting: true,
+  title: '割付表ジェネレータ',
 
   // メソッド
   //読み込み時に実行
@@ -297,10 +298,27 @@ PetiteVue.createApp({
   },
 
   //イースターエッグ
-  easterEgg(ev) {
+  yoyoky(ev) {
     if (ev.currentTarget.value == 'ヨヨキー') {
       alert('彼は呼んでも来ません。残念！');
     }
+  },
+
+  changeTitle() {
+    const tmp = this.title;
+    this.title = '(ﾟ∀ﾟ)';
+    setTimeout(() => {
+      this.title = tmp;
+    }, '3000');
+  },
+
+  changeCredit(ev) {
+    const credit = ev.currentTarget;
+    const tmp = credit.textContent;
+    credit.textContent = '(´・ω・｀)ん？';
+    setTimeout(() => {
+      credit.textContent = tmp;
+    }, '3000');
   }
 }).mount();
 
