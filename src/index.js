@@ -2,10 +2,8 @@
 
 import { makeOnePagePdf } from './makeOnePagePdf';
 import { makeTwoPagesPdf } from './makeTwoPagesPdf';
-// Bootstrapのスタイルシート側の機能を読み込む
-import 'bootstrap/dist/css/bootstrap.min.css';
-// BootstrapのJavaScript側の機能を読み込む
-import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrapのスタイルシート側の機能を読み込む
+import 'bootstrap'; // BootstrapのJavaScript側の機能を読み込む
 
 const storage = localStorage;
 const elementSuggestion = document.getElementById('elementSuggestion');
@@ -43,29 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSug();
   } else {
     elementSuggestion.value = storage.elementSuggestion;
-  }
-  setElementSug();
-
-  //テーマ設定。デフォルトはライトモード。
-  if (storage.theme == 'dark') {
-    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
-    document.body.classList.add('bg-dark');
-    document.getElementById('themeIcon').classList.add('bi-moon-fill');
-  } else {
-    document.querySelector('html').setAttribute('data-bs-theme', 'light');
-    document.body.classList.add('bg-light');
-    document.getElementById('themeIcon').classList.add('bi-sun-fill');
+    setElementSug();
   }
 });
 
 //サジェスト設定を初期化する関数
 const initializeSug = () => {
   elementSuggestion.value = ['中扉', '白', 'テキストの構成と活用法', '目次', 'ヨヨキー'].join('\n');
+  setElementSug();
 };
 
 //サジェスト設定を適用する関数
 const setElementSug = () => {
-  const items = document.getElementById('elementSuggestion').value.split(/\n/).filter(Boolean);
+  const items = elementSuggestion.value.split(/\n/).filter(Boolean);
   const itemList = document.getElementById('itemList');
 
   //既存の子要素（option）をすべて削除
@@ -76,7 +64,7 @@ const setElementSug = () => {
   for (const item of items) {
     const opt = document.createElement('option');
     opt.value = item;
-    document.getElementById('itemList').appendChild(opt);
+    itemList.appendChild(opt);
   }
 };
 
@@ -91,33 +79,11 @@ const setDefaultEl = () => {
     'テキストの構成と活用法';
 };
 
-//連番フォームの入力制限。初めの３文字だけ切り取る。
-const renban = document.querySelectorAll('.renban');
-renban.forEach(function (input) {
-  input.addEventListener('input', function (e) {
-    e.target.value = e.target.value.slice(0, 3);
-  });
-});
-
-//-----------------テーマトグルボタン押下時-------------------
-document.getElementById('changeTheme').addEventListener('click', () => {
-  if (document.querySelector('html').getAttribute('data-bs-theme') == 'light') {
-    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
-    document.body.classList.replace('bg-light', 'bg-dark');
-    document.getElementById('themeIcon').classList.replace('bi-sun-fill', 'bi-moon-fill');
-    storage.theme = 'dark';
-  } else {
-    document.querySelector('html').setAttribute('data-bs-theme', 'light');
-    document.body.classList.replace('bg-dark', 'bg-light');
-    document.getElementById('themeIcon').classList.replace('bi-moon-fill', 'bi-sun-fill');
-    storage.theme = 'light';
-  }
-});
-
+//------------------割付表生成関連--------------------
 //割付結果を格納する配列をグローバルスコープで宣言
 let result = [];
 
-//------------------割付表生成ボタン押下時--------------------
+//割付表生成ボタン押下時
 document.getElementById('generateButton').addEventListener('click', () => {
   async function geneWaritsuke() {
     //テキスト情報の値を取得
@@ -249,47 +215,104 @@ const toggleGeneBtn = () => {
   spinner.classList.toggle('d-none');
 };
 
-//-----------------フォームリセットボタンクリック時----------------------
-document.getElementById('resetForm').addEventListener('click', () => {
-  const resetForms = document.querySelectorAll('.reset');
-  resetForms.forEach(function (resetForm) {
-    resetForm.value = '';
-  });
-  setDefaultEl();
-});
+//--------------------petite-vue----------------------------------
+PetiteVue.createApp({
+  // データプロパティ
+  rows: 10,
+  theme: '',
+  whitePageSetting: '',
+  pdfMessageSetting: true,
+
+  // メソッド
+  //読み込み時に実行
+  init() {
+    //ローカルストレージに白追加設定があればそれを使用。デフォルトは2n。
+    if (storage.whitePageSetting == '4n') {
+      this.whitePageSetting = '4n';
+    } else {
+      this.whitePageSetting = '2n';
+    }
+    //ローカルストレージにPDF文言設定があればそれを使用。なければtrueに。
+    this.pdfMessageSetting = storage.pdfMessageSetting == 'off' ? false : true;
+
+    //ローカルストレージにテーマ設定があればそれを使用。なければライトモードに。
+    this.theme = storage.theme ? storage.theme : 'light';
+    this.theme == 'light' ? this.setLightTheme() : this.setDarkTheme();
+  },
+
+  //行を追加
+  addRow() {
+    if (this.rows < 30) {
+      this.rows += 1;
+    } else {
+      alert('(´・ω・｀)ちょっと多すぎるんじゃない……？');
+    }
+  },
+
+  //白追加設定のラジオボタン
+  set2n() {
+    storage.whitePageSetting = '2n';
+  },
+  set4n() {
+    storage.whitePageSetting = '4n';
+  },
+
+  //PDF文言設定のチェックボックス
+  togglePdfSwitch() {
+    if (this.pdfMessageSetting == true) {
+      storage.pdfMessageSetting = 'on';
+    } else {
+      storage.pdfMessageSetting = 'off';
+    }
+  },
+
+  //テーマ設定
+  setLightTheme() {
+    document.querySelector('html').setAttribute('data-bs-theme', 'light');
+    document.body.classList.replace('bg-dark', 'bg-light');
+    /* document.getElementById('themeIcon').classList.replace('bi-moon-fill', 'bi-sun-fill'); */
+    storage.theme = 'light';
+  },
+
+  setDarkTheme() {
+    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
+    document.body.classList.replace('bg-light', 'bg-dark');
+    /* document.getElementById('themeIcon').classList.replace('bi-sun-fill', 'bi-moon-fill'); */
+    storage.theme = 'dark';
+  },
+
+  //フォームリセット
+  resetForms() {
+    const forms = document.querySelectorAll('.reset');
+    forms.forEach(function (form) {
+      form.value = '';
+    });
+    this.rows = 10; //項目の行数をリセット
+    setDefaultEl();
+  },
+
+  //連番フォームの入力制限。初めの３文字だけ切り取る。
+  set3chr(ev) {
+    ev.currentTarget.value = ev.currentTarget.value.slice(0, 3);
+  },
+
+  //イースターエッグ
+  easterEgg(ev) {
+    if (ev.currentTarget.value == 'ヨヨキー') {
+      alert('彼は呼んでも来ません。残念！');
+    }
+  }
+}).mount();
 
 //--------------------モーダル関連----------------------------------
-const modal = document.getElementById('modal');
-
-modal.addEventListener('show.bs.modal', () => {
-  //設定ボタン押下時のサジェスト設定を一時保持しておく
-  const temp = elementSuggestion.value;
-
-  //キャンセルボタン押下時に、一時保持しておいた設定データを戻す。（＝変更内容を破棄）
-  document.getElementById('cancel').addEventListener('click', () => {
-    document.getElementById('elementSuggestion').value = temp;
-  });
-});
-//保存ボタン押下時
-document.getElementById('save').addEventListener('click', () => {
+//項目サジェスト設定変更時
+elementSuggestion.addEventListener('change', () => {
   //ローカルストレージにサジェスト設定を保存
-  storage.elementSuggestion = document.getElementById('elementSuggestion').value;
+  storage.elementSuggestion = elementSuggestion.value;
   //サジェストリストに設定
   setElementSug();
 });
 //デフォルトに戻すボタン押下時
 document.getElementById('default').addEventListener('click', () => {
   initializeSug();
-});
-
-//-------------------イースターエッグ-------------------------------
-//項目名に「ヨヨキー」と入力したらアラートを出す。
-const allElementName = document.querySelectorAll('.elementName');
-allElementName.forEach(function (elementName) {
-  elementName.addEventListener('change', function (e) {
-    const inputValue = e.target.value;
-    if (inputValue == 'ヨヨキー') {
-      alert('彼は呼んでも来ません。残念！');
-    }
-  });
 });
