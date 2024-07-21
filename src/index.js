@@ -2,8 +2,8 @@
 
 import { makeOnePagePdf } from './makeOnePagePdf';
 import { makeTwoPagesPdf } from './makeTwoPagesPdf';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrapのスタイルシート側の機能を読み込む
-import 'bootstrap'; // BootstrapのJavaScript側の機能を読み込む
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrapのスタイルシート側の機能
+import 'bootstrap'; // BootstrapのJavaScript側の機能
 
 const storage = localStorage;
 const elementSuggestion = document.getElementById('elementSuggestion');
@@ -217,26 +217,26 @@ const toggleGeneBtn = () => {
 
 //--------------------petite-vue----------------------------------
 PetiteVue.createApp({
-  // データプロパティ
+  //データプロパティ
   rows: 10,
   theme: '',
   whitePageSetting: '',
   pdfMessageSetting: true,
   title: '割付表ジェネレータ',
 
-  // メソッド
+  //メソッド
   //読み込み時に実行
   init() {
-    //ローカルストレージに白追加設定があればそれを使用。デフォルトは2n。
+    //白追加設定。ローカルストレージの値を見る。デフォルトは2n。
     if (storage.whitePageSetting == '4n') {
       this.whitePageSetting = '4n';
     } else {
       this.whitePageSetting = '2n';
     }
-    //ローカルストレージにPDF文言設定があればそれを使用。なければtrueに。
+    //pdf文言設定。デフォルトはtrue。
     this.pdfMessageSetting = storage.pdfMessageSetting == 'off' ? false : true;
 
-    //ローカルストレージにテーマ設定があればそれを使用。なければライトモードに。
+    //テーマ設定。デフォルトはライトモード。
     this.theme = storage.theme ? storage.theme : 'light';
     this.theme == 'light' ? this.setLightTheme() : this.setDarkTheme();
   },
@@ -271,14 +271,12 @@ PetiteVue.createApp({
   setLightTheme() {
     document.querySelector('html').setAttribute('data-bs-theme', 'light');
     document.body.classList.replace('bg-dark', 'bg-light');
-    /* document.getElementById('themeIcon').classList.replace('bi-moon-fill', 'bi-sun-fill'); */
     storage.theme = 'light';
   },
 
   setDarkTheme() {
     document.querySelector('html').setAttribute('data-bs-theme', 'dark');
     document.body.classList.replace('bg-light', 'bg-dark');
-    /* document.getElementById('themeIcon').classList.replace('bi-sun-fill', 'bi-moon-fill'); */
     storage.theme = 'dark';
   },
 
