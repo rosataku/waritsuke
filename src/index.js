@@ -53,6 +53,9 @@ const initializeSug = () => {
 
 //サジェスト設定を適用する関数
 const setElementSug = () => {
+  //ローカルストレージにサジェスト設定を保存
+  storage.elementSuggestion = elementSuggestion.value;
+
   const items = elementSuggestion.value.split(/\n/).filter(Boolean);
   const itemList = document.getElementById('itemList');
 
@@ -67,6 +70,11 @@ const setElementSug = () => {
     itemList.appendChild(opt);
   }
 };
+
+//項目サジェスト設定変更時
+elementSuggestion.addEventListener('change', () => {
+  setElementSug();
+});
 
 //項目に既定値を入れる関数
 const setDefaultEl = () => {
@@ -295,6 +303,23 @@ PetiteVue.createApp({
     ev.currentTarget.value = ev.currentTarget.value.slice(0, 3);
   },
 
+  //すべての設定を初期化ボタン押下時
+  toggleInitArea() {
+    toggleInitArea();
+  },
+
+  //設定リセット処理
+  initAllSettings() {
+    this.theme = 'light';
+    this.setLightTheme();
+    this.whitePageSetting = '2n';
+    this.set2n();
+    this.pdfMessageSetting = true;
+    this.togglePdfSwitch();
+    initializeSug();
+    this.toggleInitArea();
+  },
+
   //イースターエッグ
   yoyoky(ev) {
     if (ev.currentTarget.value == 'ヨヨキー') {
@@ -304,7 +329,7 @@ PetiteVue.createApp({
 
   changeTitle() {
     const tmp = this.title;
-    this.title = '(ﾟ∀ﾟ)';
+    this.title = '(｀･ω･´)';
     setTimeout(() => {
       this.title = tmp;
     }, '3000');
@@ -320,15 +345,21 @@ PetiteVue.createApp({
   }
 }).mount();
 
-//--------------------モーダル関連----------------------------------
-//項目サジェスト設定変更時
-elementSuggestion.addEventListener('change', () => {
-  //ローカルストレージにサジェスト設定を保存
-  storage.elementSuggestion = elementSuggestion.value;
-  //サジェストリストに設定
-  setElementSug();
-});
-//デフォルトに戻すボタン押下時
-document.getElementById('default').addEventListener('click', () => {
-  initializeSug();
+//----------設定リセット関連---------------------------
+const initBtn = document.getElementById('init');
+const confirm = document.getElementById('confirm');
+
+const toggleInitArea = () => {
+  initBtn.classList.toggle('d-none');
+  confirm.classList.toggle('d-none');
+  confirm.scrollIntoView({
+    behavior: 'smooth'
+  });
+};
+
+//モーダルを閉じた時は明示的に設定リセットボタンを元に戻す
+const modal = document.getElementById('modal');
+modal.addEventListener('hidden.bs.modal', () => {
+  initBtn.classList.remove('d-none');
+  confirm.classList.add('d-none');
 });
