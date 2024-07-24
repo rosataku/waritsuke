@@ -258,7 +258,23 @@ PetiteVue.createApp({
     }
   },
 
-  //白追加設定のラジオボタン
+  //連番の入力値修正
+  only3Numbers(ev) {
+    const el = ev.currentTarget;
+
+    //全角数字を半角数字に変換、数字以外を削除
+    el.value = el.value.replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g, '');
+
+    //文字列が0のみであれば0を代入、そうでなければ先頭の0を削除し、さらに先頭の３文字を切り出す
+    const zeroOnly = /^0+$/;
+    if (zeroOnly.test(el.value)) {
+      el.value = '0';
+    } else {
+      el.value = el.value.replace(/^0+/, '').slice(0, 3);
+    }
+  },
+
+  //白追加設定をローカルストレージに保存
   set2n() {
     storage.whitePageSetting = '2n';
   },
@@ -266,7 +282,7 @@ PetiteVue.createApp({
     storage.whitePageSetting = '4n';
   },
 
-  //PDF文言設定のチェックボックス
+  //PDF文言設定をローカルストレージに保存
   togglePdfSwitch() {
     if (this.pdfMessageSetting == true) {
       storage.pdfMessageSetting = 'on';
@@ -296,11 +312,6 @@ PetiteVue.createApp({
     });
     this.rows = 10; //項目の行数をリセット
     setDefaultEl();
-  },
-
-  //連番フォームの入力制限。初めの３文字だけ切り取る。
-  set3chr(ev) {
-    ev.currentTarget.value = ev.currentTarget.value.slice(0, 3);
   },
 
   //すべての設定を初期化ボタン押下時

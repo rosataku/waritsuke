@@ -100,7 +100,6 @@
                   id="textNumber"
                   class="form-control mb-3 reset"
                   placeholder="テキストNo."
-                  pattern="^[a-zA-Z0-9]+$"
                   maxlength="10"
                 />
               </div>
@@ -142,20 +141,16 @@
                 <input
                   type="text"
                   inputmode="numeric"
-                  maxlength="3"
                   class="form-control reset"
-                  oninput="value = onlyNumbers(value)"
+                  @change="only3Numbers"
                   placeholder="from"
-                  @input="set3chr"
                 />
                 <input
                   type="text"
                   inputmode="numeric"
-                  maxlength="3"
                   class="form-control reset"
-                  oninput="value = onlyNumbers(value)"
+                  @change="only3Numbers"
                   placeholder="to"
-                  @input="set3chr"
                 />
               </div>
             </div>
@@ -326,11 +321,5 @@
 
     <script src="https://unpkg.com/petite-vue"></script>
     <script src="./main.js"></script>
-    <script>
-      //全角数字→半角数字への自動変換と、数字以外を削除する関数。
-      const onlyNumbers = (n) => {
-        return n.replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/\D/g, '');
-      };
-    </script>
   </body>
 </html>
