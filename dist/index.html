@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="シンプルな操作で、割付表をすばやく作成。設定のカスタマイズも可能。モダンなデザインとレスポンシブ対応によりどのデバイスでも快適です。"
+    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,7 +46,7 @@
       <div class="row align-items-center">
         <div class="col-xl"></div>
         <div class="col-xl-5">
-          <h2 class="text-center" id="title" title="ダブルクリックしてみて" @dblclick="changeTitle">{{title}}</h2>
+          <h2 class="text-center" id="title" @dblclick="changeTitle">{{title}}</h2>
         </div>
         <div class="col-xl">
           <div class="row justify-content-end mx-auto">
@@ -75,11 +79,11 @@
             <div class="row">
               <div class="col-sm-auto">
                 <label for="year" class="mb-1 ms-1">年度</label>
-                <select name="" id="year" class="form-select mb-3"></select>
+                <select id="year" class="form-select mb-3"></select>
               </div>
               <div class="col-sm-auto">
                 <label for="semester" class="mb-1 ms-1">学期</label>
-                <select name="" id="semester" class="form-select">
+                <select id="semester" class="form-select">
                   <option value="">----</option>
                   <option>1学期</option>
                   <option>夏期</option>
@@ -131,6 +135,7 @@
                   type="text"
                   list="itemList"
                   class="form-control reset"
+                  name="elementName"
                   maxlength="15"
                   placeholder="項目名"
                   @change="yoyoky"
@@ -144,6 +149,7 @@
                   class="form-control reset"
                   @change="only3Numbers"
                   placeholder="from"
+                  name="from"
                 />
                 <input
                   type="text"
@@ -151,6 +157,7 @@
                   class="form-control reset"
                   @change="only3Numbers"
                   placeholder="to"
+                  name="to"
                 />
               </div>
             </div>
