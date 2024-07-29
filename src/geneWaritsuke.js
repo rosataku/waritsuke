@@ -3,22 +3,20 @@
 import { makeOnePagePdf } from './makeOnePagePdf';
 import { makeTwoPagesPdf } from './makeTwoPagesPdf';
 
+const geneBtn = document.getElementById('generateButton');
+const geneBtnText = document.getElementById('geneBtnText');
+const loadingText = document.getElementById('loadingText');
+
+//割付表生成ボタンをトグルする関数
+const toggleGeneBtn = () => {
+  geneBtn.toggleAttribute('disabled');
+  geneBtnText.classList.toggle('d-none');
+  loadingText.classList.toggle('d-none');
+};
+
 //割付表生成ボタン押下時
-document.getElementById('generateButton').addEventListener('click', () => {
-  const geneBtn = document.getElementById('generateButton');
-  const geneBtnText = document.getElementById('geneBtnText');
-  const geneBtnTextTemp = geneBtnText.textContent;
-  const rocketIcon = document.getElementById('rocketIcon');
-  const spinner = document.getElementById('spinner');
-
-  //割付表生成ボタンの文字列以外をトグルする関数
-  const toggleGeneBtn = () => {
-    geneBtn.toggleAttribute('disabled');
-    rocketIcon.classList.toggle('d-none');
-    spinner.classList.toggle('d-none');
-  };
-
-  async function geneWaritsuke() {
+geneBtn.addEventListener('click', () => {
+  const geneWaritsuke = async () => {
     //テキスト情報の値を取得
     const year = document.getElementById('year').value;
     const semester = document.getElementById('semester').value;
@@ -28,15 +26,15 @@ document.getElementById('generateButton').addEventListener('click', () => {
     //「項目」の入力内容を格納する配列を宣言
     const inputObjs = [];
 
-    //項目設定の各行を配列に格納
+    //項目設定の各行を取得
     const inputLists = document.getElementsByClassName('inputList');
 
     //各行につき、オブジェクトを生成して配列inputObjsに格納
     for (const inputList of inputLists) {
       const obj = {
-        elementName: inputList.firstElementChild.firstElementChild.value,
-        startNumber: inputList.lastElementChild.firstElementChild.nextElementSibling.value,
-        endNumber: inputList.lastElementChild.lastElementChild.value
+        elementName: inputList.querySelector('input[name="elementName"]').value,
+        from: inputList.querySelector('input[name="from"]').value,
+        to: inputList.querySelector('input[name="to"]').value
       };
       inputObjs.push(obj);
     }
@@ -44,36 +42,28 @@ document.getElementById('generateButton').addEventListener('click', () => {
     //割付結果を格納する配列
     const result = [];
 
-    //配列inputObjsの各オブジェクトについて、項目名・連番の有無によって場合分けしながらresult[]にpushしていく。
-    for (const obj of inputObjs) {
-      if (!(obj.elementName == '' && obj.startNumber == '' && obj.endNumber == '')) {
-        if (obj.startNumber == '' && obj.endNumber == '') {
-          //項目名のみ入力されていた場合。
-          result.push(`${obj.elementName}`);
-        } else {
-          //連番Fromまたは連番Toが空白だった場合に値を入れる。
-          if (obj.startNumber == '') {
-            obj.startNumber = 1;
-          }
-          if (obj.endNumber == '') {
-            obj.endNumber = obj.startNumber;
-          }
+    //配列inputObjsの各オブジェクトについて、連番を生成してresult[]にpushしていく。
+    for (const inputObj of inputObjs) {
+      const { elementName, from, to } = inputObj;
 
-          //数値に変換
-          const startN = Number(obj.startNumber);
-          const endN = Number(obj.endNumber);
+      //すべて空白の場合はループをスキップ
+      if (elementName == '' && from == '' && to == '') continue;
 
-          //項目名に連番をつけてresult[]にpush。fromよりtoの方が小さい場合は降順に連番を振る。
-          if (endN >= startN) {
-            for (let i = startN; i <= endN; i += 1) {
-              result.push(`${obj.elementName + i}`);
-            }
-          } else {
-            for (let i = startN; i >= endN; i -= 1) {
-              result.push(`${obj.elementName + i}`);
-            }
-          }
-        }
+      if (from == '' && to == '') {
+        //項目名のみ入力されていた場合。
+        result.push(`${elementName}`);
+      } else {
+        //連番FromまたはToが空白だった場合は値を入れる。
+        const fromN = from == '' ? 1 : Number(from);
+        const toN = to == '' ? fromN : Number(to);
+
+        //連番を生成してresult[]にpush。fromよりtoの方が小さい場合は降順に連番を振る。
+        const range =
+          toN >= fromN
+            ? [...Array(toN - fromN + 1).keys()].map((i) => fromN + i)
+            : [...Array(fromN - toN + 1).keys()].map((i) => fromN - i);
+
+        range.forEach((i) => result.push(`${elementName}${i}`));
       }
     }
 
@@ -84,53 +74,45 @@ document.getElementById('generateButton').addEventListener('click', () => {
     const radio = document.getElementsByName('whitePageSetting');
     let btnValue = '';
     for (const btn of radio) {
-      if (btn.checked == true) {
+      if (btn.checked) {
         btnValue = btn.value;
       }
     }
     if (btnValue == '2n') {
-      for (let i = 1; result.length % 2 != 0; i += 1) {
-        result.push('白');
-      }
+      while (result.length % 2 != 0) result.push('白');
     } else if (btnValue == '4n') {
-      for (let i = 1; result.length % 4 != 0; i += 1) {
-        result.push('白');
-      }
+      while (result.length % 4 != 0) result.push('白');
     }
 
     //PDF校了用メッセージを作成
-    const checkbox = document.getElementsByName('pdfMessageSetting')[0];
-    let pdfMessage = '';
-    if (checkbox.checked == true && pdfMaxP >= 3) {
-      pdfMessage = [
-        '・表紙と中扉は版下支給（同封）。',
-        `・本文3頁（"${result[2]}") ～`,
-        `　本文${pdfMaxP}頁（"${result[pdfMaxP - 1]}"）までは、`,
-        '　PDFデータ支給（同封のCD）となります。'
-      ].join('\n');
-    }
+    const pdfMessageSetting = document.getElementsByName('pdfMessageSetting')[0].checked;
+    const pdfMessage =
+      pdfMessageSetting && pdfMaxP >= 3
+        ? [
+            '・表紙と中扉は版下支給（同封）。',
+            `・本文3頁（"${result[2]}") ～`,
+            `　本文${pdfMaxP}頁（"${result[pdfMaxP - 1]}"）までは、`,
+            '　PDFデータ支給（同封のCD）となります。'
+          ].join('\n')
+        : '';
 
     //PDF生成ライブラリに渡すオブジェクトを作成
-    const pdfSource = { textNumber: textNumber, textName: textName, pdfMessage: pdfMessage, result: result };
+    const pdfSrc = { textNumber, textName, pdfMessage, result };
 
     //PDF生成
     if (result.length <= 288) {
-      geneBtnText.textContent = ' 生成中……';
       toggleGeneBtn();
-      await makeOnePagePdf(pdfSource);
-      geneBtnText.textContent = geneBtnTextTemp;
+      await makeOnePagePdf(pdfSrc);
       toggleGeneBtn();
     } else if (result.length <= 576) {
-      geneBtnText.textContent = ' 生成中……';
       toggleGeneBtn();
-      await makeTwoPagesPdf(pdfSource);
-      geneBtnText.textContent = geneBtnTextTemp;
+      await makeTwoPagesPdf(pdfSrc);
       toggleGeneBtn();
     } else {
       //ページ数が多すぎる場合、生成せずアラートを出す。
       alert('ページ数が多すぎるため、割付表を生成できませんでした。（総ページ数の上限は576です。）');
     }
-  }
+  };
 
   geneWaritsuke();
 });

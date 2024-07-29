@@ -9,27 +9,21 @@ const elementSuggestion = document.getElementById('elementSuggestion');
 //-----------------ページ読み込み時--------------------
 document.addEventListener('DOMContentLoaded', () => {
   //現在の年を取得
-  const date = new Date();
-  const currentYear = date.getFullYear();
+  const currentYear = new Date().getFullYear();
 
   //フッターのクレジットを設定
   document.getElementById('credit').textContent = `© ${currentYear} k_hiyama`;
 
   //年度の選択項目を設定
   const year = document.getElementById('year');
-  const opt1 = document.createElement('option');
-  opt1.value = '';
-  opt1.textContent = '----';
-  year.appendChild(opt1);
-
-  const opt2 = document.createElement('option');
-  opt2.textContent = `${currentYear}年度`;
-  opt2.selected = true;
-  year.appendChild(opt2);
-
-  const opt3 = document.createElement('option');
-  opt3.textContent = `${currentYear + 1}年度`;
-  year.appendChild(opt3);
+  const years = ['----', `${currentYear}年度`, `${currentYear + 1}年度`];
+  years.forEach((text, index) => {
+    const opt = document.createElement('option');
+    opt.textContent = text;
+    if (index == 0) opt.value = '';
+    if (index == 1) opt.selected = true;
+    year.appendChild(opt);
+  });
 
   //項目に既定値を入れる
   setDefaultEl();
@@ -58,9 +52,8 @@ const setElementSug = () => {
   const itemList = document.getElementById('itemList');
 
   //既存の子要素（option）をすべて削除
-  while (itemList.firstChild) {
-    itemList.removeChild(itemList.firstChild);
-  }
+  itemList.innerHTML = '';
+
   //子要素としてoptionを新たに追加していく
   for (const item of items) {
     const opt = document.createElement('option');
@@ -74,15 +67,13 @@ elementSuggestion.addEventListener('change', () => {
   setElementSug();
 });
 
-//項目に既定値を入れる関数
+//項目名に既定値を入れる関数
 const setDefaultEl = () => {
-  document.getElementById('inputLists').firstElementChild.firstElementChild.firstElementChild.value = '中扉';
-  document.getElementById('inputLists').firstElementChild.nextElementSibling.firstElementChild.firstElementChild.value =
-    '白';
-  document.getElementById(
-    'inputLists'
-  ).firstElementChild.nextElementSibling.nextElementSibling.firstElementChild.firstElementChild.value =
-    'テキストの構成と活用法';
+  const elementNames = document.getElementsByName('elementName');
+  const defaults = ['中扉', '白', 'テキストの構成と活用法'];
+  defaults.forEach((value, index) => {
+    if (elementNames[index]) elementNames[index].value = value;
+  });
 };
 
 //--------------------petite-vue----------------------------------
@@ -146,30 +137,25 @@ PetiteVue.createApp({
 
   //PDF文言設定をローカルストレージに保存
   togglePdfSwitch() {
-    if (this.pdfMessageSetting == true) {
-      storage.pdfMessageSetting = 'on';
-    } else {
-      storage.pdfMessageSetting = 'off';
-    }
+    storage.pdfMessageSetting = this.pdfMessageSetting ? 'on' : 'off';
   },
 
   //テーマ設定
   setLightTheme() {
-    document.querySelector('html').setAttribute('data-bs-theme', 'light');
+    document.documentElement.setAttribute('data-bs-theme', 'light');
     document.body.classList.replace('bg-dark', 'bg-light');
     storage.theme = 'light';
   },
 
   setDarkTheme() {
-    document.querySelector('html').setAttribute('data-bs-theme', 'dark');
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
     document.body.classList.replace('bg-light', 'bg-dark');
     storage.theme = 'dark';
   },
 
   //フォームリセット
   resetForms() {
-    const forms = document.querySelectorAll('.reset');
-    forms.forEach(function (form) {
+    document.querySelectorAll('.reset').forEach((form) => {
       form.value = '';
     });
     this.rows = 10; //項目の行数をリセット
@@ -231,8 +217,7 @@ const toggleInitArea = () => {
 };
 
 //モーダルを閉じた時は設定リセットボタンを元に戻す
-const modal = document.getElementById('modal');
-modal.addEventListener('hidden.bs.modal', () => {
+document.getElementById('modal').addEventListener('hidden.bs.modal', () => {
   initBtn.classList.remove('d-none');
   confirm.classList.add('d-none');
 });

@@ -128,38 +128,38 @@
             </div>
           </div>
 
-          <div id="inputLists">
-            <div class="row inputList py-1" v-for="n in rows" :key="n">
-              <div class="col">
-                <input
-                  type="text"
-                  list="itemList"
-                  class="form-control reset"
-                  name="elementName"
-                  maxlength="15"
-                  placeholder="項目名"
-                  @change="yoyoky"
-                />
-              </div>
-              <div class="input-group col">
-                <span class="input-group-text">連番</span>
-                <input
-                  type="text"
-                  inputmode="numeric"
-                  class="form-control reset"
-                  @change="only3Numbers"
-                  placeholder="from"
-                  name="from"
-                />
-                <input
-                  type="text"
-                  inputmode="numeric"
-                  class="form-control reset"
-                  @change="only3Numbers"
-                  placeholder="to"
-                  name="to"
-                />
-              </div>
+          <div class="row inputList py-1" v-for="n in rows" :key="n">
+            <div class="col">
+              <input
+                type="text"
+                list="itemList"
+                class="form-control reset"
+                name="elementName"
+                maxlength="15"
+                placeholder="項目名"
+                @change="yoyoky"
+              />
+            </div>
+            <div class="input-group col">
+              <span class="input-group-text">連番</span>
+              <input
+                type="text"
+                inputmode="numeric"
+                class="form-control reset"
+                @change="only3Numbers"
+                placeholder="from"
+                name="from"
+                autocomplete="off"
+              />
+              <input
+                type="text"
+                inputmode="numeric"
+                class="form-control reset"
+                @change="only3Numbers"
+                placeholder="to"
+                name="to"
+                autocomplete="off"
+              />
             </div>
           </div>
 
@@ -169,14 +169,11 @@
 
       <div class="d-grid gap-2 col-md-6 mx-auto">
         <button type="button" class="btn btn-primary btn-lg my-4" id="generateButton">
-          <i class="bi bi-rocket-takeoff-fill" id="rocketIcon"></i>
-          <span
-            class="spinner-border spinner-border-sm align-baseline d-none"
-            role="status"
-            aria-hidden="true"
-            id="spinner"
-          ></span>
-          <span id="geneBtnText"> 割付表生成</span>
+          <span id="geneBtnText"><i class="bi bi-rocket-takeoff-fill me-2"></i>割付表生成</span>
+          <span id="loadingText" class="d-none">
+            <span class="spinner-border spinner-border-sm align-baseline me-2" role="status" aria-hidden="true"></span
+            >生成中……
+          </span>
         </button>
       </div>
     </div>
