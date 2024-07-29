@@ -89,11 +89,8 @@ PetiteVue.createApp({
   //読み込み時に実行
   init() {
     //白追加設定。ローカルストレージの値を見る。デフォルトは2n。
-    if (storage.whitePageSetting == '4n') {
-      this.whitePageSetting = '4n';
-    } else {
-      this.whitePageSetting = '2n';
-    }
+    this.whitePageSetting = storage.whitePageSetting == '4n' ? '4n' : '2n';
+
     //pdf文言設定。デフォルトはtrue。
     this.pdfMessageSetting = storage.pdfMessageSetting == 'off' ? false : true;
 
@@ -120,11 +117,7 @@ PetiteVue.createApp({
 
     //文字列が0のみであれば0を代入、そうでなければ先頭の0を削除し、さらに先頭の３文字を切り出す
     const zeroOnly = /^0+$/;
-    if (zeroOnly.test(el.value)) {
-      el.value = '0';
-    } else {
-      el.value = el.value.replace(/^0+/, '').slice(0, 3);
-    }
+    el.value = zeroOnly.test(el.value) ? '0' : el.value.replace(/^0+/, '').slice(0, 3);
   },
 
   //白追加設定をローカルストレージに保存
