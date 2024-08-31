@@ -1,12 +1,15 @@
 'use strict';
 
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrapのスタイルシート側の機能
-import 'bootstrap'; // BootstrapのJavaScript側の機能
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import { createApp } from 'petite-vue';
+import Sortable from 'sortablejs';
 
 const storage = localStorage;
 const elementSuggestion = document.getElementById('elementSuggestion');
 
-//-----------------ページ読み込み時--------------------
+//-----------------DOM構築時--------------------
 document.addEventListener('DOMContentLoaded', () => {
   //現在の年を取得
   const currentYear = new Date().getFullYear();
@@ -24,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (index == 1) opt.selected = true;
     year.appendChild(opt);
   });
-
-  //項目に既定値を入れる
-  setDefaultEl();
 
   //ローカルストレージにサジェスト設定がなければ初期化、あればそれを適用。
   if (storage.elementSuggestion == undefined) {
@@ -76,8 +76,15 @@ const setDefaultEl = () => {
   });
 };
 
-//--------------------petite-vue----------------------------------
-PetiteVue.createApp({
+//項目入力リストをドラッグ＆ドロップで並び替えられるようにする
+const el = document.getElementById('sortable');
+const sortable = new Sortable(el, {
+  handle: '.handle',
+  animation: 150
+});
+
+//-----------------petite-vue------------------
+createApp({
   //データプロパティ
   rows: 10,
   theme: '',
@@ -152,7 +159,11 @@ PetiteVue.createApp({
       form.value = '';
     });
     this.rows = 10; //項目の行数をリセット
-    setDefaultEl();
+
+    // DOMの更新が完了した後にsetDefaultElを実行
+    this.$nextTick(() => {
+      setDefaultEl();
+    });
   },
 
   //すべての設定を初期化ボタン押下時
@@ -175,7 +186,7 @@ PetiteVue.createApp({
   //イースターエッグ
   yoyoky(ev) {
     if (ev.currentTarget.value == 'ヨヨキー') {
-      alert('彼は呼んでも来ません。残念！');
+      alert('彼は呼んでも来ません。残念…！');
     }
   },
 
@@ -196,6 +207,9 @@ PetiteVue.createApp({
     }, '3000');
   }
 }).mount();
+
+//項目に既定値を入れる
+setDefaultEl();
 
 //----------設定リセット関連---------------------------
 const initBtn = document.getElementById('init');

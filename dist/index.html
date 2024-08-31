@@ -7,7 +7,6 @@
       name="description"
       content="シンプルな操作で、割付表をすばやく作成。設定のカスタマイズも可能。モダンなデザインとレスポンシブ対応によりどのデバイスでも快適です。"
     />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,6 +32,10 @@
         font-style: normal;
       }
 
+      .handle {
+        cursor: grab;
+      }
+
       [v-cloak] {
         display: none;
       }
@@ -46,7 +49,7 @@
       <div class="row align-items-center">
         <div class="col-xl"></div>
         <div class="col-xl-5">
-          <h2 class="text-center" id="title" @dblclick="changeTitle">{{title}}</h2>
+          <h2 class="text-center" id="title"><span @click="changeTitle">{{title}}</span></h2>
         </div>
         <div class="col-xl">
           <div class="row justify-content-end mx-auto">
@@ -128,38 +131,41 @@
             </div>
           </div>
 
-          <div class="row inputList py-1" v-for="n in rows" :key="n">
-            <div class="col">
-              <input
-                type="text"
-                list="itemList"
-                class="form-control reset"
-                name="elementName"
-                maxlength="15"
-                placeholder="項目名"
-                @change="yoyoky"
-              />
-            </div>
-            <div class="input-group col">
-              <span class="input-group-text">連番</span>
-              <input
-                type="text"
-                inputmode="numeric"
-                class="form-control reset"
-                @change="only3Numbers"
-                placeholder="from"
-                name="from"
-                autocomplete="off"
-              />
-              <input
-                type="text"
-                inputmode="numeric"
-                class="form-control reset"
-                @change="only3Numbers"
-                placeholder="to"
-                name="to"
-                autocomplete="off"
-              />
+          <div id="sortable">
+            <div class="row inputList py-1 align-items-center" v-for="n in rows" :key="n">
+              <div class="col">
+                <input
+                  type="text"
+                  list="itemList"
+                  class="form-control reset"
+                  name="elementName"
+                  maxlength="15"
+                  placeholder="項目名"
+                  @change="yoyoky"
+                />
+              </div>
+              <div class="input-group col">
+                <span class="input-group-text">連番</span>
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  class="form-control reset"
+                  @change="only3Numbers"
+                  placeholder="from"
+                  name="from"
+                  autocomplete="off"
+                />
+                <input
+                  type="text"
+                  inputmode="numeric"
+                  class="form-control reset"
+                  @change="only3Numbers"
+                  placeholder="to"
+                  name="to"
+                  autocomplete="off"
+                />
+              </div>
+              <i class="bi bi-list col-1 handle" title="ドラッグして並び替える"></i>
             </div>
           </div>
 
@@ -178,7 +184,7 @@
       </div>
     </div>
     <footer class="my-5 text-muted text-center text-small">
-      <p class="mb-1" id="credit" @dblclick="changeCredit"></p>
+      <p class="mb-1"><span id="credit" @click="changeCredit"></span></p>
       <ul class="list-inline">
         <li class="list-inline-item">
           <a
@@ -322,7 +328,8 @@
       </div>
     </div>
 
-    <script src="https://unpkg.com/petite-vue"></script>
+    </div>
+
     <script src="./main.js"></script>
     <script src="./geneWaritsuke.js" defer></script>
   </body>
