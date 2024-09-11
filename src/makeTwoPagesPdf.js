@@ -1,14 +1,14 @@
-import { text, image, barcodes } from '@pdfme/schemas';
+import { text } from '@pdfme/schemas';
 import { generate } from '@pdfme/generator';
 import ipaexm from '/dist/fonts/ipaexm.ttf';
 import ipaexg from '/dist/fonts/ipaexg.ttf';
 
 //引数オブジェクトは、{ textNumber: string, textName: string, pdfMessage: string, result: array }
 export async function makeTwoPagesPdf(pdfSource) {
-  const a = await fetch(ipaexm);
-  const minbuf = await a.arrayBuffer();
-  const b = await fetch(ipaexg);
-  const gbuf = await b.arrayBuffer();
+  const min = await fetch(ipaexm);
+  const minbuf = await min.arrayBuffer();
+  const g = await fetch(ipaexg);
+  const gbuf = await g.arrayBuffer();
 
   const font = {
     serif: {
@@ -15080,7 +15080,7 @@ export async function makeTwoPagesPdf(pdfSource) {
     pdfmeVersion: '4.0.0'
   };
 
-  const plugins = { text, image, qrcode: barcodes.qrcode };
+  const plugins = { text };
 
   //input（オブジェクトの配列）を作成
   const inputs = [];
