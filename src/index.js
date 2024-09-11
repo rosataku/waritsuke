@@ -91,6 +91,8 @@ createApp({
   whitePageSetting: '',
   pdfMessageSetting: true,
   title: '割付表ジェネレータ',
+  isChangingTitle: false,
+  isChangingCredit: false,
 
   //メソッド
   //読み込み時に実行
@@ -191,19 +193,27 @@ createApp({
   },
 
   changeTitle() {
+    if (this.isChangingTitle) return;
+    this.isChangingTitle = true;
+
     const tmp = this.title;
     this.title = '(｀･ω･´)';
     setTimeout(() => {
       this.title = tmp;
+      this.isChangingTitle = false;
     }, '3000');
   },
 
   changeCredit(ev) {
+    if (this.isChangingCredit) return;
+    this.isChangingCredit = true;
+
     const credit = ev.currentTarget;
     const tmp = credit.textContent;
     credit.textContent = '(´・ω・｀)ん？';
     setTimeout(() => {
       credit.textContent = tmp;
+      this.isChangingCredit = false;
     }, '3000');
   }
 }).mount();
