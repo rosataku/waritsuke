@@ -98,14 +98,14 @@ createApp({
   //読み込み時に実行
   init() {
     //白追加設定。ローカルストレージの値を見る。デフォルトは2n。
-    this.whitePageSetting = storage.whitePageSetting == '4n' ? '4n' : '2n';
+    this.whitePageSetting = storage.whitePageSetting ? storage.whitePageSetting : '2n';
 
     //pdf文言設定。デフォルトはtrue。
-    this.pdfMessageSetting = storage.pdfMessageSetting == 'off' ? false : true;
+    this.pdfMessageSetting = storage.pdfMessageSetting !== 'off' && storage.pdfMessageSetting !== 'false';
 
-    //テーマ設定。デフォルトはライトモード。
+    //テーマ設定。デフォルトはライト。
     this.theme = storage.theme ? storage.theme : 'light';
-    this.theme == 'light' ? this.setLightTheme() : this.setDarkTheme();
+    this.setTheme();
   },
 
   //行を追加
@@ -133,29 +133,19 @@ createApp({
   },
 
   //白追加設定をローカルストレージに保存
-  set2n() {
-    storage.whitePageSetting = '2n';
-  },
-  set4n() {
-    storage.whitePageSetting = '4n';
+  setWhitePageSetting() {
+    storage.whitePageSetting = this.whitePageSetting;
   },
 
   //PDF文言設定をローカルストレージに保存
   togglePdfSwitch() {
-    storage.pdfMessageSetting = this.pdfMessageSetting ? 'on' : 'off';
+    storage.pdfMessageSetting = this.pdfMessageSetting;
   },
 
   //テーマ設定
-  setLightTheme() {
-    document.documentElement.setAttribute('data-bs-theme', 'light');
-    document.body.classList.replace('bg-dark', 'bg-light');
-    storage.theme = 'light';
-  },
-
-  setDarkTheme() {
-    document.documentElement.setAttribute('data-bs-theme', 'dark');
-    document.body.classList.replace('bg-light', 'bg-dark');
-    storage.theme = 'dark';
+  setTheme() {
+    document.documentElement.setAttribute('data-bs-theme', this.theme);
+    storage.theme = this.theme;
   },
 
   //フォームリセット
@@ -179,9 +169,9 @@ createApp({
   //設定リセット処理
   initAllSettings() {
     this.theme = 'light';
-    this.setLightTheme();
+    this.setTheme();
     this.whitePageSetting = '2n';
-    this.set2n();
+    this.setWhitePageSetting();
     this.pdfMessageSetting = true;
     this.togglePdfSwitch();
     initializeSug();

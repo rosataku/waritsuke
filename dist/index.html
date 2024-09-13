@@ -230,7 +230,7 @@
                     v-model="theme"
                     id="lightTheme"
                     value="light"
-                    @change="setLightTheme"
+                    @change="setTheme"
                   />
                   <label class="form-check-label" for="lightTheme"><i class="bi bi-sun-fill me-1"></i>ライト</label>
                 </div>
@@ -242,7 +242,7 @@
                     v-model="theme"
                     id="darkTheme"
                     value="dark"
-                    @change="setDarkTheme"
+                    @change="setTheme"
                   />
                   <label class="form-check-label" for="darkTheme"><i class="bi bi-moon-fill me-1"></i>ダーク</label>
                 </div>
@@ -261,7 +261,7 @@
                     name="whitePageSetting"
                     v-model="whitePageSetting"
                     value="2n"
-                    @change="set2n"
+                    @change="setWhitePageSetting"
                   />
                   <label for="2n">総ページ数が 偶数 になるように</label>
                 </div>
@@ -274,7 +274,7 @@
                     name="whitePageSetting"
                     v-model="whitePageSetting"
                     value="4n"
-                    @change="set4n"
+                    @change="setWhitePageSetting"
                   />
                   <label for="4n">総ページ数が 4の倍数 になるように</label>
                 </div>
