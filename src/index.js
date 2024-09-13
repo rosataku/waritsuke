@@ -1,8 +1,8 @@
 'use strict';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { Modal } from 'bootstrap';
 import { createApp } from 'petite-vue';
 import Sortable from 'sortablejs';
 
@@ -113,7 +113,10 @@ createApp({
     if (this.rows < 30) {
       this.rows += 1;
     } else {
-      alert('(´・ω・｀)ちょっと多すぎるんじゃない……？');
+      //警告モーダルを表示
+      const tooManyRowsModalElement = document.getElementById('tooManyRowsModal');
+      const tooManyRowsModal = new Modal(tooManyRowsModalElement);
+      tooManyRowsModal.show();
     }
   },
 
@@ -188,7 +191,10 @@ createApp({
   //イースターエッグ
   yoyoky(ev) {
     if (ev.currentTarget.value == 'ヨヨキー') {
-      alert('彼は呼んでも来ません。残念…！');
+      //ヨヨキーモーダルを表示
+      const yoyokyModalElement = document.getElementById('yoyokyModal');
+      const yoyokyModal = new Modal(yoyokyModalElement);
+      yoyokyModal.show();
     }
   },
 
