@@ -1,0 +1,132 @@
+body {
+  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+}
+
+#title {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+h4 {
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* data-bs-theme="dark" の場合 */
+html[data-bs-theme='dark'] body {
+  background-color: #181a1b; /* 深いグレーを背景色に */
+  color: #e4e6eb; /* 明るいグレーの文字色に変更して、読みやすく */
+}
+
+html[data-bs-theme='dark'] h2,
+html[data-bs-theme='dark'] h4 {
+  color: #f5f6f7; /* ヘッダーはさらに明るくして目立たせる */
+}
+
+html[data-bs-theme='dark'] .btn-outline-secondary {
+  color: #e4e6eb;
+  border-color: #4b4d4f;
+}
+
+html[data-bs-theme='dark'] .btn-outline-secondary:hover {
+  background-color: #282a2b; /* ホバー時に少し明るいグレーの背景色を追加 */
+}
+
+html[data-bs-theme='dark'] .form-control,
+html[data-bs-theme='dark'] .form-select {
+  background-color: #181a1b;
+  color: #e4e6eb; /* フォーム内の文字色を明るく */
+  border-color: #4b4d4f;
+}
+
+/* プレースホルダーをさらに薄くする */
+html[data-bs-theme='dark'] .form-control::placeholder,
+html[data-bs-theme='dark'] .form-select::placeholder {
+  color: #6c757d; /* プレースホルダーテキストを淡いグレーに */
+}
+
+/* モーダル内の背景と文字色を洗練 */
+html[data-bs-theme='dark'] .modal-content {
+  background-color: #181a1b; /* モーダルの背景色を深いグレーに */
+  color: #e4e6eb; /* モーダル内の文字を明るく */
+}
+
+html[data-bs-theme='dark'] .modal-title {
+  color: #f5f6f7; /* タイトルは白に近い色で強調 */
+}
+
+html[data-bs-theme='dark'] .btn-close {
+  filter: invert(1); /* 閉じるボタンの色も調整 */
+}
+
+/* ライトテーマの場合、コントラストを高めた配色 */
+html[data-bs-theme='light'] body {
+  background-color: #f8f9fa; /* 薄いグレーの背景で目に優しい */
+  color: #212529; /* 濃いグレーの文字色でコントラストを確保 */
+}
+
+html[data-bs-theme='light'] h2,
+html[data-bs-theme='light'] h4 {
+  color: #343a40; /* タイトルはさらに濃いグレーで強調 */
+}
+
+html[data-bs-theme='light'] .btn-outline-secondary {
+  color: #212529; /* ボタンの文字も濃いグレー */
+  border-color: #c2c4c5; /* 境界線は淡いグレー */
+}
+
+html[data-bs-theme='light'] .btn-outline-secondary:hover {
+  background-color: #e2e6ea; /* ホバー時に少し濃い背景色 */
+}
+
+html[data-bs-theme='light'] .form-control,
+html[data-bs-theme='light'] .form-select {
+  background-color: #ffffff; /* フォームの背景色は純白 */
+  color: #495057; /* 文字色は中程度のグレー */
+  border-color: #c2c4c5; /* 境界線は淡いグレー */
+}
+
+html[data-bs-theme='light'] .input-group-text {
+  color: #495057; /* 文字色は中程度のグレー */
+  border-color: #c2c4c5; /* 境界線は淡いグレー */
+}
+
+html[data-bs-theme='light'] .form-control::placeholder,
+html[data-bs-theme='light'] .form-select::placeholder {
+  color: #adb5bd; /* プレースホルダーを薄いグレーに設定 */
+}
+
+/* モーダル内のスタイルもライトテーマに合わせてコントラストを強調 */
+html[data-bs-theme='light'] .modal-content {
+  background-color: #f8f9fa;
+  color: #212529; /* モーダル内の文字も濃いグレー */
+}
+
+html[data-bs-theme='light'] .modal-title {
+  color: #343a40; /* タイトルは少し濃いグレー */
+}
+
+html[data-bs-theme='light'] .btn-close {
+  filter: none; /* 閉じるボタンの色はデフォルト */
+}
+
+/* その他の要素のスタイルも同様に調整 */
+html[data-bs-theme='light'] .btn-primary {
+  background-color: #0d6efd; /* ブルーのボタン */
+  border-color: #0d6efd;
+  color: #ffffff;
+}
+
+html[data-bs-theme='light'] .btn-primary:hover {
+  background-color: #0b5ed7; /* ホバー時に濃いブルー */
+}
+
+.handle {
+  cursor: grab;
+}
+
+[v-cloak] {
+  display: none;
+}
