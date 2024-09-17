@@ -9,6 +9,10 @@ import Sortable from 'sortablejs';
 const storage = localStorage;
 const elementSuggestion = document.getElementById('elementSuggestion');
 
+const DEFAULT_THEME = 'system';
+const DEFAULT_WHITE_PAGE_SETTING = '2n';
+const DEFAULT_ROWS = 10;
+
 //-----------------DOM構築時--------------------
 document.addEventListener('DOMContentLoaded', () => {
   //現在の年を取得
@@ -35,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     elementSuggestion.value = storage.elementSuggestion;
     setElementSug();
   }
+
+  //項目サジェスト設定変更時
+  elementSuggestion.addEventListener('change', () => {
+    setElementSug();
+  });
 });
 
 //サジェスト設定を初期化する関数
@@ -62,11 +71,6 @@ const setElementSug = () => {
   }
 };
 
-//項目サジェスト設定変更時
-elementSuggestion.addEventListener('change', () => {
-  setElementSug();
-});
-
 //項目名に既定値を入れる関数
 const setDefaultEl = () => {
   const elementNames = document.getElementsByName('elementName');
@@ -86,7 +90,7 @@ const sortable = new Sortable(el, {
 //-----------------petite-vue------------------
 createApp({
   //データプロパティ
-  rows: 10,
+  rows: DEFAULT_ROWS,
   theme: '',
   whitePageSetting: '',
   pdfMessageSetting: true,
@@ -97,27 +101,26 @@ createApp({
   //メソッド
   //読み込み時に実行
   init() {
-    //白追加設定。ローカルストレージの値を見る。デフォルトは2n。
-    this.whitePageSetting = storage.whitePageSetting ? storage.whitePageSetting : '2n';
+    //白追加設定。ローカルストレージの値を見る。
+    this.whitePageSetting = storage.whitePageSetting ? storage.whitePageSetting : DEFAULT_WHITE_PAGE_SETTING;
 
-    //pdf文言設定。デフォルトはtrue。
+    //pdf文言設定。
     this.pdfMessageSetting = storage.pdfMessageSetting !== 'off' && storage.pdfMessageSetting !== 'false';
 
-    //テーマ設定。デフォルトはライト。
-    this.theme = storage.theme ? storage.theme : 'light';
+    //テーマ設定。
+    this.theme = storage.theme ? storage.theme : DEFAULT_THEME;
     this.setTheme();
   },
 
   //行を追加
   addRow() {
-    if (this.rows < 30) {
-      this.rows += 1;
-    } else {
-      //警告モーダルを表示
+    if (this.rows >= 30) {
       const tooManyRowsModalElement = document.getElementById('tooManyRowsModal');
       const tooManyRowsModal = new Modal(tooManyRowsModalElement);
       tooManyRowsModal.show();
+      return; // 行の追加を防ぐ
     }
+    this.rows += 1;
   },
 
   //連番の入力値修正
@@ -144,7 +147,12 @@ createApp({
 
   //テーマ設定
   setTheme() {
-    document.documentElement.setAttribute('data-bs-theme', this.theme);
+    let themeToApply = this.theme;
+    if (this.theme == 'system') {
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      themeToApply = systemPrefersDark ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-bs-theme', themeToApply);
     storage.theme = this.theme;
   },
 
@@ -153,7 +161,7 @@ createApp({
     document.querySelectorAll('.reset').forEach((form) => {
       form.value = '';
     });
-    this.rows = 10; //項目の行数をリセット
+    this.rows = DEFAULT_ROWS; //項目の行数をリセット
 
     // DOMの更新が完了した後にsetDefaultElを実行
     this.$nextTick(() => {
@@ -168,9 +176,9 @@ createApp({
 
   //設定リセット処理
   initAllSettings() {
-    this.theme = 'light';
+    this.theme = DEFAULT_THEME;
     this.setTheme();
-    this.whitePageSetting = '2n';
+    this.whitePageSetting = DEFAULT_WHITE_PAGE_SETTING;
     this.setWhitePageSetting();
     this.pdfMessageSetting = true;
     this.togglePdfSwitch();
@@ -180,7 +188,7 @@ createApp({
 
   //イースターエッグ
   yoyoky(ev) {
-    if (ev.currentTarget.value == 'ヨヨキー') {
+    if (ev.currentTarget.value.trim() == 'ヨヨキー') {
       //ヨヨキーモーダルを表示
       const yoyokyModalElement = document.getElementById('yoyokyModal');
       const yoyokyModal = new Modal(yoyokyModalElement);
