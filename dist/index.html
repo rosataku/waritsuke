@@ -9,11 +9,7 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap&text=ω()割付表ジェネレータテキスト情報項目設定´｀･
-    "
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet" />
     <link rel="icon" href="./img/faviconW.ico" />
     <link rel="stylesheet" href="./main.css" />
 
@@ -171,7 +167,7 @@
         </button>
       </div>
     </div>
-    <footer class="my-5 text-muted text-center text-small">
+    <footer class="mt-5 mb-4 text-muted text-center text-small">
       <p class="mb-1"><span id="credit" @click="changeCredit"></span></p>
       <ul class="list-inline">
         <li class="list-inline-item">
@@ -195,9 +191,21 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-5">
+            <div class="mb-5 mt-3">
               <h5 class="mb-3"><i class="bi bi-circle-half me-2"></i>外観テーマ設定</h5>
               <div class="ms-2">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="theme"
+                    v-model="theme"
+                    id="systemTheme"
+                    value="system"
+                    @change="setTheme"
+                  />
+                  <label class="form-check-label" for="systemTheme"><i class="bi bi-display me-1"></i>システム</label>
+                </div>
                 <div class="form-check form-check-inline mb-2">
                   <input
                     class="form-check-input"
@@ -221,20 +229,6 @@
                     @change="setTheme"
                   />
                   <label class="form-check-label" for="darkTheme"><i class="bi bi-moon-fill me-1"></i>ダーク</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="theme"
-                    v-model="theme"
-                    id="systemTheme"
-                    value="system"
-                    @change="setTheme"
-                  />
-                  <label class="form-check-label" for="systemTheme"
-                    ><i class="bi bi-laptop me-1"></i>システムの外観</label
-                  >
                 </div>
               </div>
             </div>
