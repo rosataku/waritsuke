@@ -123,7 +123,7 @@ html[data-bs-theme='light'] .btn-close {
 }
 
 .modal-content {
-  padding: 1.5rem; /* モダルのパディングを大きめに */
+  padding: 0.2rem 1.5rem; /* モダルのパディングを大きめに */
   border-radius: 18px;
 }
 

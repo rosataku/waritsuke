@@ -2,6 +2,7 @@
 
 import { makeOnePagePdf } from './makeOnePagePdf';
 import { makeTwoPagesPdf } from './makeTwoPagesPdf';
+import { Modal } from 'bootstrap';
 
 const geneBtn = document.getElementById('generateButton');
 const geneBtnText = document.getElementById('geneBtnText');
@@ -110,7 +111,10 @@ geneBtn.addEventListener('click', () => {
       toggleGeneBtn();
     } else {
       //ページ数が多すぎる場合、生成せずアラートを出す。
-      alert('ページ数が多すぎるため、割付表を生成できませんでした。（総ページ数の上限は576です。）');
+      const tooManyPagesModalElement = document.getElementById('tooManyPagesModal');
+      const tooManyPagesModal = new Modal(tooManyPagesModalElement);
+      tooManyPagesModal.show();
+      return;
     }
   };
 
