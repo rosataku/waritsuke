@@ -6,14 +6,6 @@ body {
   font-style: normal;
 }
 
-/* body {
-  font-family: 'Noto Sans JP', sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.5;
-} */
-
 #title {
   font-family: 'M PLUS Rounded 1c', sans-serif;
   font-weight: 700;
@@ -128,10 +120,11 @@ html[data-bs-theme='light'] .btn-close {
 
 .modal-content {
   padding: 0.2rem 1.5rem; /* モダルのパディングを大きめに */
-  border-radius: 18px;
+  border-radius: 18px !important;
 }
 
-.btn {
+.btn,
+textarea {
   border-radius: 6px !important; /* 角丸を少し強調 */
 }
 
