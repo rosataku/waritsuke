@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     year.appendChild(opt);
   });
 
+  //項目に既定値を入れる
+  setDefaultEl();
+
   //ローカルストレージにサジェスト設定がなければ初期化、あればそれを適用。
   if (storage.elementSuggestion == undefined) {
     initializeSug();
@@ -221,9 +224,6 @@ createApp({
     }, '3000');
   }
 }).mount();
-
-//項目に既定値を入れる
-setDefaultEl();
 
 //----------設定リセット関連---------------------------
 const initBtn = document.getElementById('init');
