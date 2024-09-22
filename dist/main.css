@@ -123,14 +123,34 @@ html[data-bs-theme='light'] .btn-close {
   border-radius: 18px !important;
 }
 
-.btn,
-textarea {
-  border-radius: 6px !important; /* 角丸を少し強調 */
+.btn {
+  border-radius: 8px !important; /* 角丸を少し強調 */
+}
+
+.btn-primary {
+  border-radius: 8px !important; /* 角丸を少し強調 */
+}
+
+#generateButton {
+  border-radius: 8px !important; /* 角丸を少し強調 */
 }
 
 .form-control,
-.form-select {
-  border-radius: 6px; /* 角丸を少し強調 */
+.form-select,
+textarea {
+  border-radius: 8px !important; /* input-groupは以降で上書き */
+}
+
+.input-group-text {
+  border-radius: 8px 0 0 8px !important;
+}
+
+input[name='from'] {
+  border-radius: 0 !important;
+}
+
+input[name='to'] {
+  border-radius: 0 8px 8px 0 !important;
 }
 
 input[type='text'],
